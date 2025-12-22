@@ -1,4 +1,4 @@
-const filters = {
+let filters = {
     brightness: {
         value: 100,
         min: 0,
@@ -66,6 +66,7 @@ const imageCanvas = document.getElementById("image-canvas");
 const imageInput = document.getElementById("image-input");
 const canvasContext = imageCanvas.getContext("2d");
 const imagePlaceholder = document.querySelector(".placeholder-image");
+const resetBtn = document.getElementById("reset-btn");
 let file = null;
 let image = null;
 
@@ -93,11 +94,14 @@ function createFilterElement(name, unit, value, min, max){
     return div
 }
 
-Object.keys(filters).forEach(key =>{
+function createFilter(){
+    Object.keys(filters).forEach(key =>{
+        const filterElement = createFilterElement(key, filters[key].unit, filters[key].value, filters[key].min, filters[key].max);
+        filterContain.appendChild(filterElement)
+    })
+}
+createFilter();
 
-    const filterElement = createFilterElement(key, filters[key].unit, filters[key].value, filters[key].min, filters[key].max);
-    filterContain.appendChild(filterElement)
-})
 
 imageInput.addEventListener("change", (event)=>{
     file = event.target.files[0];
@@ -127,3 +131,72 @@ function applyFilters(){
     `.trim();
     canvasContext.drawImage(image, 0, 0);
 }
+
+resetBtn.addEventListener("click", ()=>{
+    filters = {
+        brightness: {
+            value: 100,
+            min: 0,
+            max: 200,
+            unit: "%"
+        },
+        contrast: {
+            value: 100,
+            min: 0,
+            max: 200,
+            unit: "%"
+        },
+        // exposure: {
+        //     value: 100,
+        //     min: 0,
+        //     max: 200,
+        //     unit: "%"
+        // },
+        saturation: {
+            value: 100,
+            min: 0,
+            max: 200,
+            unit: "%"
+        },
+        hueRotation: {
+            value: 0,
+            min: 0,
+            max: 200,
+            unit: "deg"
+        },
+        blur:{
+            value: 0,
+            min: 0,
+            max: 200,
+            unit: "px"
+        }, 
+        grayscale:{
+            value: 0,
+            min: 0,
+            max: 200,
+            unit: "%"
+        },
+        sepia:{
+            value: 0,
+            min: 0,
+            max: 100,
+            unit: "%"
+        },
+        opacity: {
+            value: 100,
+            min: 0,
+            max: 100,
+            unit: "%"
+        },
+        invert: {
+            value: 0,
+            min: 0,
+            max: 100,
+            unit: "%"
+        },
+    }
+    applyFilters();
+
+    filterContain.querySelectorAll('.filter').forEach(el => el.remove());
+    createFilter();
+})
