@@ -67,6 +67,7 @@ const imageInput = document.getElementById("image-input");
 const canvasContext = imageCanvas.getContext("2d");
 const imagePlaceholder = document.querySelector(".placeholder-image");
 const resetBtn = document.getElementById("reset-btn");
+const downloadBtn = document.getElementById("download-btn");
 let file = null;
 let image = null;
 
@@ -200,3 +201,10 @@ resetBtn.addEventListener("click", ()=>{
     filterContain.querySelectorAll('.filter').forEach(el => el.remove());
     createFilter();
 })
+
+downloadBtn.addEventListener("click", ()=>{
+    const link = document.createElement("a");
+    link.download = "edited-image.png";
+    link.href = imageCanvas.toDataURL();
+    link.click();
+});
