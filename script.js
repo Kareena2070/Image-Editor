@@ -1,69 +1,59 @@
 const filters = {
     brightness: {
-        name: "brightness",
         value: 100,
         min: 0,
         max: 200,
         unit: "%"
     },
     contrast: {
-        name: "Contrast",
         value: 100,
         min: 0,
         max: 200,
         unit: "%"
     },
-    exposure: {
-        name: "Contrast",
-        value: 100,
-        min: 0,
-        max: 200,
-        unit: "%"
-    },
+    // exposure: {
+    //     value: 100,
+    //     min: 0,
+    //     max: 200,
+    //     unit: "%"
+    // },
     saturation: {
-        name: "Saturatio",
         value: 100,
         min: 0,
         max: 200,
         unit: "%"
     },
     hueRotation: {
-        name: "Hue Rotation",
         value: 0,
         min: 0,
         max: 200,
         unit: "deg"
     },
     blur:{
-        name: "Blur",
         value: 0,
         min: 0,
         max: 200,
         unit: "px"
     }, 
     grayscale:{
-        name: "grayscale",
         value: 0,
         min: 0,
         max: 200,
         unit: "%"
     },
     sepia:{
-        name: "Sepia",
         value: 0,
         min: 0,
         max: 100,
         unit: "%"
     },
     opacity: {
-        name: "Opacity",
         value: 100,
         min: 0,
         max: 100,
         unit: "%"
     },
     invert: {
-        name: "Invert",
         value: 0,
         min: 0,
         max: 100,
@@ -76,6 +66,8 @@ const imageCanvas = document.getElementById("image-canvas");
 const imageInput = document.getElementById("image-input");
 const canvasContext = imageCanvas.getContext("2d");
 const imagePlaceholder = document.querySelector(".placeholder-image");
+let file = null;
+let image = null;
 
 function createFilterElement(name, unit, value, min, max){
     const div = document.createElement("div");
@@ -93,6 +85,11 @@ function createFilterElement(name, unit, value, min, max){
 
     div.appendChild(p)
     div.appendChild(input)
+
+    input.addEventListener("input", (event)=>{
+        filters[name].value = event.target.value;
+        applyFilters();
+    })
     return div
 }
 
@@ -103,13 +100,30 @@ Object.keys(filters).forEach(key =>{
 })
 
 imageInput.addEventListener("change", (event)=>{
-    const file = event.target.files[0];
+    file = event.target.files[0];
+    imageCanvas.style.display = "block";
     imagePlaceholder.style.display = "none";
     const img = new Image();
     img.src = URL.createObjectURL(file);
     img.onload = ()=>{
+        image = img;
         imageCanvas.width = img.width;
         imageCanvas.height = img.height;
         canvasContext.drawImage(img, 0, 0);
     }
 })
+
+function applyFilters(){
+    canvasContext.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+    canvasContext.filter = `brightness(${filters.brightness.value}${filters.brightness.unit})
+    contrast(${filters.contrast.value}${filters.contrast.unit})
+    saturate(${filters.saturation.value}${filters.saturation.unit})
+    hue-rotate(${filters.hueRotation.value}${filters.hueRotation.unit})
+    blur(${filters.blur.value}${filters.blur.unit})
+    grayscale(${filters.grayscale.value}${filters.grayscale.unit})
+    sepia(${filters.sepia.value}${filters.sepia.unit})
+    opacity(${Number(filters.opacity.value) / 100})
+    invert(${filters.invert.value}${filters.invert.unit})
+    `.trim();
+    canvasContext.drawImage(image, 0, 0);
+}
