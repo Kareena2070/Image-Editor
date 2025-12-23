@@ -68,6 +68,7 @@ const canvasContext = imageCanvas.getContext("2d");
 const imagePlaceholder = document.querySelector(".placeholder-image");
 const resetBtn = document.getElementById("reset-btn");
 const downloadBtn = document.getElementById("download-btn");
+const presetsContainer = document.querySelector(".presets");
 let file = null;
 let image = null;
 
@@ -207,4 +208,148 @@ downloadBtn.addEventListener("click", ()=>{
     link.download = "edited-image.png";
     link.href = imageCanvas.toDataURL();
     link.click();
+});
+
+
+const presents = {
+    dramaPreset : {
+        brightness: 90,
+        contrast: 150,
+        saturation: 80,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 0,
+        sepia: 10,
+        opacity: 100,
+        invert: 0
+    },
+    vintagePreset : {
+        brightness: 105,
+        contrast: 90,
+        saturation: 70,
+        hueRotation: 10,
+        blur: 0,
+        grayscale: 10,
+        sepia: 40,
+        opacity: 100,
+        invert: 0
+    },
+    blackAndWhitePreset : {
+        brightness: 100,
+        contrast: 130,
+        saturation: 0,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 100,
+        sepia: 0,
+        opacity: 100,
+        invert: 0
+    },
+    warmPreset : {
+        brightness: 105,
+        contrast: 110,
+        saturation: 120,
+        hueRotation: 5,
+        blur: 0,
+        grayscale: 0,
+        sepia: 15,
+        opacity: 100,
+        invert: 0
+    },
+    coolPreset : {
+        brightness: 95,
+        contrast: 120,
+        saturation: 90,
+        hueRotation: 180,
+        blur: 0,
+        grayscale: 0,
+        sepia: 0,
+        opacity: 100,
+        invert: 0
+    },
+    softPreset : {
+        brightness: 110,
+        contrast: 80,
+        saturation: 90,
+        hueRotation: 0,
+        blur: 1,
+        grayscale: 0,
+        sepia: 5,
+        opacity: 100,
+        invert: 0
+    },
+    invertedPreset : {
+        brightness: 100,
+        contrast: 100,
+        saturation: 100,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 0,
+        sepia: 0,
+        opacity: 100,
+        invert: 100
+    },
+    cinematicPreset :{
+        brightness: 90,
+        contrast: 140,
+        saturation: 85,
+        hueRotation: 350,
+        blur: 0,
+        grayscale: 0,
+        sepia: 5,
+        opacity: 100,
+        invert: 0
+    },
+    retroPreset : {
+        brightness: 110,
+        contrast: 95,
+        saturation: 75,
+        hueRotation: 25,
+        blur: 0,
+        grayscale: 15,
+        sepia: 50,
+        opacity: 100,
+        invert: 0
+    },
+    grittyPreset : {
+        brightness: 95,
+        contrast: 170,
+        saturation: 70,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 20,
+        sepia: 0,
+        opacity: 100,
+        invert: 0
+    },
+    dreamyPreset : {
+        brightness: 115,
+        contrast: 85,
+        saturation: 110,
+        hueRotation: 5,
+        blur: 2,
+        grayscale: 0,
+        sepia: 10,
+        opacity: 100,
+        invert: 0
+    }
+
+}
+
+Object.keys(presents).forEach(presetName => {
+    const presetbtn = document.createElement("button");
+    presetbtn.classList.add("btn");  
+    presetbtn.innerText = presetName;
+    presetsContainer.appendChild(presetbtn);
+   
+    presetbtn.addEventListener("click", ()=>{
+    
+        const preset = presents[presetName];
+        Object.keys(preset).forEach(filterName => {
+            filters[filterName].value = preset[filterName];
+        });
+        applyFilters();
+        filterContain.querySelectorAll('.filter').forEach(el => el.remove());
+        createFilter();
+    });
 });

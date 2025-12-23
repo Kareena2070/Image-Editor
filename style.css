@@ -130,3 +130,15 @@ canvas{
     max-height: 70vh;
     display: none;
 }
+
+.preset-div{
+    display: flex;
+    flex-direction: column;
+    gap: var(--gutter-md);
+}
+
+.presets{
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gutter-md);
+}   
